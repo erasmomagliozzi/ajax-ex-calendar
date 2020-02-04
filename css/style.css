@@ -3,6 +3,38 @@
   padding: 0;
   box-sizing: border-box;
 }
+body{
+  display: flex;
+  justify-content: center;
+}
+.mese{
+  width: 1000px;
+  text-align: center;
+
+}
 .red{
   background-color: red;
+}
+.header{
+  display: flex;
+  justify-content: center;
+}
+#prev,
+#next{
+  padding: 5px;
+  margin: 10px;
+  border: 2px solid black;
+}
+h3{
+  font-size: 30px;
+}
+.days{
+  display: flex;
+  flex-wrap: wrap;
+}
+.days li{
+  width: 80px;
+  min-height: 50px;
+  border: 2px solid black;
+  list-style: none;
 }

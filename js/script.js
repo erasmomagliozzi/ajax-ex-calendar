@@ -16,14 +16,34 @@ $(document).ready(function(){
 
   daysMonth(baseMonth);
   daysHolidays(baseMonth);
-  $('#next').click(function(){
 
+  $('#next').click(function(){
+    var thisMonth = $('h3').attr('data-month');
+    var date = moment(thisMonth).add(1, 'months');
+     console.log(date);
+
+    daysMonth(date);
+    daysHolidays(date);
+
+  });
+  $('#prev').click(function(){
+    var thisMonth = $('h3').attr('data-month');
+    var date = moment(thisMonth).subtract(1, 'months');
+     console.log(date);
+
+
+     daysMonth(date);
+     daysHoliday(date);
   });
 
 // -----FUNZIONI
 // FUNZIONE CHE STAMPA I GIORNI DEL MESE
 function daysMonth(mese){
   $('.days').html('');
+  //inseriamo h1 dinamicamente
+ $('h3').text(mese.format('MMMM YYYY'));
+ $('h3').attr('data-month', mese.format('YYYY-MM'));
+
   var daysInMonth = mese.daysInMonth();
 
   for (var i = 1; i <= daysInMonth; i++){
@@ -57,8 +77,10 @@ function daysHolidays(mese){
      },
    success: function (data, stato) {
      var holidays = data.response;
+
      for (var i = 0; i < holidays.length; i++) {
        var dayHolidays = holidays[i];
+       console.log(dayHolidays);
        var holidayData = dayHolidays.date;
        console.log(holidayData);
 
