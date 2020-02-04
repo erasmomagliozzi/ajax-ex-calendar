@@ -9,27 +9,29 @@
     <script src="https://momentjs.com/downloads/moment.min.js" charset="utf-8"></script>
   </head>
   <body>
-    <div class="mese">
+    <div class="mese" >
+      <div id="prev">
+        prev
+      </div>
       <h3>Gennaio 2018</h3>
-      <ul>
+      <div id="next">
+        next
+      </div>
+      <ul class="days">
 
       </ul>
-
     </div>
 
 
 
 
     <script id="entry-template" type="text/x-handlebars-template">
-    <div class="entry" data="2018-01-01">
-      <li >
-        <span>{{day}}</span>
-        <span>{{month}}</span>
-        <span>{{name}}</span>
+
+      <li class="day" data-date="{{dateCompleta}}">
+        <span class="data">{{day}} {{month}} </span>
+        <span class="festivita">{{name}}</span>
        </li>
 
-
-    </div>
   </script>
 
   <script src="js/script.js" charset="utf-8"></script>

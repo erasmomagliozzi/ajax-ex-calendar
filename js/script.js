@@ -5,53 +5,75 @@
 // Evidenziare le festività nella lista
 
 $(document).ready(function(){
-
-  daysMonth();
-  $.ajax({
-   url: "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
-   method: "GET",
-   success: function (data, stato) {
-     for (var i = 0; i < data.response.length; i++) {
-       console.log(data.response[i].date);
-
-      $(".mese li").each(function () {
-
-        if ($(this).attr("data") == data.response[i].date) {
-          $(this).addClass("red");
-
-          var source = $("#entry-template").html();
-          var template = Handlebars.compile(source);
-          var context = {
-            name : data.response[i].name
-          }
-          var html = template(context);
-          $('.mese ul').append(html);
-        };
-      });
-    }
-
-
-   },
-  error: function (richiesta, stato, errori) {
-      alert("E' avvenuto un errore. " + errore);
+  var thisMonth = 0;
+  var year = 2018;
+  var baseMonth = moment(
+   {
+     year: year,
+     month: thisMonth
    }
+ );
+
+  daysMonth(baseMonth);
+  daysHolidays(baseMonth);
+  $('#next').click(function(){
+
   });
 
-function daysMonth(){
-  var daysInMonth = moment("2018-01", "YYYY-MM").daysInMonth();
-  console.log(daysInMonth);
-  var month = moment("01").format("MMMM");
-  console.log(month);
+// -----FUNZIONI
+// FUNZIONE CHE STAMPA I GIORNI DEL MESE
+function daysMonth(mese){
+  $('.days').html('');
+  var daysInMonth = mese.daysInMonth();
+
   for (var i = 1; i <= daysInMonth; i++){
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var context = {
       day: i,
-      month : month
+      month : mese.format('MMMM'),
+      dateCompleta: mese.format('YYYY-MM') + '-' + addZero(i)
     };
     var html = template(context);
-    $(".mese").append(html);
+    $(".days").append(html);
   }
+}
+// FUNZIONE CHE AGGIUNGE GLI ZERI AI NUMERI MINORE DI 10
+function addZero(num) {
+  if(num < 10) {
+    return '0' + num;
+  }
+  return num;
+}
+
+// FUNZIONE CHE PRENDE I GIORI FESTIVI DALL/API, E LI COLORA DI ROSSO SUL CALENDARIO
+function daysHolidays(mese){
+  $.ajax({
+   url: "https://flynn.boolean.careers/exercises/api/holidays",
+   method: "GET",
+   data: {
+       year: mese.year(),
+       month: mese.month()
+     },
+   success: function (data, stato) {
+     var holidays = data.response;
+     for (var i = 0; i < holidays.length; i++) {
+       var dayHolidays = holidays[i];
+       var holidayData = dayHolidays.date;
+       console.log(holidayData);
+
+      $(".day").each(function () {
+        if ($(this).attr("data-date") == holidayData) {
+          $(this).addClass("red");
+          $(this).find('.festivita').append(dayHolidays.name);
+        }
+      });
+    }
+   },
+  error: function (richiesta, stato, errori) {
+      alert("E' avvenuto un errore. " + errore);
+   }
+  });
 }
 
 
